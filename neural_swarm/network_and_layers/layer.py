@@ -61,7 +61,7 @@ class Layer:
             )
 
     def update(self, learning_rate):
-        self.weights -= learning_rate * np.dot(
+        self.weights -= learning_rate * np.matmul(
             self.delta, self.previous_layer.weighted_sum
         )
         # self.bias -= learning_rate * self.delta

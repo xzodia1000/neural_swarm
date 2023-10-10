@@ -7,6 +7,8 @@ from test.test_data import prep_data
 def test_layer_init():
     layers = []
     activation = Logistic()
+
+    # x, y = np.array([[2, 3, 2], [3, 3, 3]]), np.array([1, 0])
     x, y = prep_data()
 
     for i in range(10):
@@ -65,7 +67,7 @@ def test_backward(layers=None):
         print("old weights = ", layer.weights)
         print("old bias = ", layer.bias)
         print()
-        print(layer.backward(0.001))
+        print("delta = ", layer.backward(0.001))
         print()
         print("new weights = ", layer.weights)
         print("new bias = ", layer.bias)
