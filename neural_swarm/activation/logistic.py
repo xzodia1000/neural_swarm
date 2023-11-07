@@ -8,3 +8,6 @@ class Logistic(Activation):
 
     def derivative(self, x):
         return self.evaluate(x) * (1 - self.evaluate(x))
+
+    def __str__(self):
+        return "Logistic"

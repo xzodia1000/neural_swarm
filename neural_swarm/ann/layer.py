@@ -66,6 +66,15 @@ class Layer:
         )
         # self.bias -= learning_rate * self.delta
 
+    def update_weights(self, weights):
+        if weights.shape != self.weights.shape:
+            raise ValueError("Weights shape mismatch")
+
+        self.weights = weights
+
+    def update_activation(self, activation):
+        self.activation = activation
+
     def initialize_weights(self):
         limit = np.sqrt(6.0 / (self.nodes + self.previous_layer.nodes))
         return np.random.uniform(
@@ -73,4 +82,4 @@ class Layer:
         )
 
     def initialize_bias(self):
-        return np.zeros(self.nodes)
+        return np.zeros((self.previous_layer.weighted_sum.shape[0], self.nodes))

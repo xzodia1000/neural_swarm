@@ -8,3 +8,6 @@ class Tanh(Activation):
 
     def derivative(self, x):
         return 1 - np.tanh(x) ** 2
+
+    def __str__(self):
+        return "Tanh"

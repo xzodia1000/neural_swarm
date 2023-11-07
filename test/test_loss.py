@@ -1,4 +1,4 @@
-import numpy as np
+import math
 from sklearn.metrics import hinge_loss, log_loss, mean_squared_error
 from neural_swarm.loss.hinge import Hinge
 from neural_swarm.loss.mse import Mse

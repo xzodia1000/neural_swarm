@@ -1,6 +1,6 @@
 from random import randrange
 from neural_swarm.activation.logistic import Logistic
-from neural_swarm.network_and_layers.layer import Layer
+from neural_swarm.ann.layer import Layer
 from test.test_data import prep_data
 
 
@@ -62,10 +62,11 @@ def test_backward(layers=None):
     print("\nBackward")
     print("-" * 100 + "\n")
     for i, layer in enumerate(reversed(layers)):
-        print(f"Layer {i}")
+        print(f"Layer {len(layers) - i}")
         print("nodes = ", layer.nodes)
         print("old weights = ", layer.weights)
         print("old bias = ", layer.bias)
+        print("sigma = ", layer.weighted_sum)
         print()
         print("delta = ", layer.backward(0.001))
         print()

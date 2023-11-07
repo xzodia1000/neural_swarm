@@ -8,3 +8,6 @@ class Relu(Activation):
 
     def derivative(self, x):
         return np.where(x > 0, 1, 0)
+
+    def __str__(self):
+        return "Relu"
