@@ -1,17 +1,43 @@
-from neural_swarm.activation.relu import Relu
-from neural_swarm.pso.particle import Particle
-from test.test_data import prep_test_ann
+from neural_swarm.ann.loss import BinaryCrossEntropy
+from neural_swarm.pso.ann_function import ANNFunction
+from neural_swarm.pso.constants import (
+    LOCAL_GLOBAL_INFORMANTS,
+    LOCAL_NEIGHBOUR_INFORMANTS,
+    RANDOM_INFORMANTS,
+)
+from neural_swarm.pso.pso import PSO
+from test.test_data import prep_data, prep_test_ann
 
 
-def test_particle_encode_decode():
+def test_pso():
     ann = prep_test_ann()
-    particle = Particle(ann)
+    x, y_true = prep_data()
+    loss = BinaryCrossEntropy()
+    fun = ANNFunction(ann, x, y_true, loss)
 
-    print("Initial Weights: ")
-    for layer in ann.network.layers:
-        if layer.weights is not None:
-            print(layer.weights)
+    swarm_size = 15
+    alpha = 1
+    beta = 1
+    gamma = 1
+    delta = 1
+    epsilon = 0.4
+    informants_type = RANDOM_INFORMANTS
+    informants_size = 3
+    iterations = 1000
 
-    encoded = particle.encode()
-    print("\nEncoded Result: ", encoded)
-    print("\nDecoded Result: ", particle.decode(encoded))
+    pso = PSO(
+        fun,
+        swarm_size,
+        alpha,
+        beta,
+        gamma,
+        delta,
+        epsilon,
+        informants_type,
+        informants_size,
+        iterations,
+        "MIN",
+    )
+
+    result = pso.evolve()
+    print(result)

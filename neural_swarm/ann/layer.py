@@ -8,78 +8,48 @@ class Layer:
         activation=None,
         previous_layer=None,
         next_layer=None,
-        input=None,
-        y_true=None,
     ):
         self.nodes = nodes
         self.activation = activation
         self.previous_layer = previous_layer
         self.next_layer = next_layer
         self.weighted_sum = None
-        self.input = input
-        self.y_true = y_true
+        self.input = None
         self.weights = None
         self.bias = None
         self.delta = None
 
-    def forward(self):
-        if self.weights is None and self.input is None:
-            self.weights = self.initialize_weights()
-            self.bias = self.initialize_bias()
-
+    def forward(self, input):
+        self.input = input
         self.weighted_sum = (
-            self.activation.evaluate(
-                np.matmul(self.previous_layer.weighted_sum, self.weights.T) + self.bias
-            )
-            if self.input is None
-            else self.input
+            self.activation.evaluate(np.dot(self.input, self.weights))
+            if self.next_layer is not None
+            else self.activation.evaluate(self.input)
         )
-
         return self.weighted_sum
 
-    def backward(self, learning_rate):
-        self.calculate_delta()
-
-        if self.weights is not None:
-            self.update(learning_rate)
-
-        return self.delta
-
-    def calculate_delta(self):
-        if self.y_true is not None:
-            true = np.array(
-                self.y_true,
-            ).reshape(1, self.y_true.shape[0])
-            weighted_sum = self.weighted_sum.T
-
-            error = true - weighted_sum
-            self.delta = self.activation.derivative(weighted_sum) * error
-
-        elif self.activation is not None:
-            self.delta = self.activation.derivative(self.weighted_sum.T) * (
-                np.dot(self.next_layer.weights.T, self.next_layer.delta)
-            )
-
-    def update(self, learning_rate):
-        self.weights -= learning_rate * np.matmul(
-            self.delta, self.previous_layer.weighted_sum
-        )
-        # self.bias -= learning_rate * self.delta
-
-    def update_weights(self, weights):
-        if weights.shape != self.weights.shape:
+    def set_weights(self, weights=None):
+        if self.weights is None:
+            self.weights = self.initialize_weights()
+        elif weights.shape != self.weights.shape:
             raise ValueError("Weights shape mismatch")
+        elif weights.shape == self.weights.shape:
+            self.weights = weights
 
-        self.weights = weights
-
-    def update_activation(self, activation):
+    def set_activation(self, activation):
         self.activation = activation
 
     def initialize_weights(self):
-        limit = np.sqrt(6.0 / (self.nodes + self.previous_layer.nodes))
+        limit = np.sqrt(6.0 / (self.nodes + self.next_layer.nodes))
         return np.random.uniform(
-            -limit, limit, size=(self.nodes, self.previous_layer.nodes)
+            -limit, limit, size=(self.nodes, self.next_layer.nodes)
         )
 
     def initialize_bias(self):
-        return np.zeros((self.previous_layer.weighted_sum.shape[0], self.nodes))
+        return np.zeros((self.input.shape[0], self.next_layer.nodes))
+
+    def get_input(self):
+        return self.input
+
+    def update_input(self, input):
+        self.input = input

@@ -18,13 +18,14 @@ class Activation(ABC):
 
 class Sigmoid(Activation):
     def evaluate(self, x):
+        x = np.clip(x, -500, 500)
         return 1 / (1 + np.exp(-x))
 
     def derivative(self, x):
         return self.evaluate(x) * (1 - self.evaluate(x))
 
     def __str__(self):
-        return "Logistic"
+        return "Sigmoid"
 
 
 class Tanh(Activation):

@@ -1,51 +1,96 @@
+import random
+import secrets
 import numpy as np
-from neural_swarm.activation.logistic import Logistic
-from neural_swarm.activation.relu import Relu
-from neural_swarm.activation.tanh import Tanh
-from neural_swarm.ann.ann import ANN
+from neural_swarm.pso.constants import (
+    RANDOM_INFORMANTS,
+    LOCAL_NEIGHBOUR_INFORMANTS,
+    LOCAL_GLOBAL_INFORMANTS,
+)
 
 
 class Particle:
-    def __init__(self, ann):
-        self._activation_functions_enc = {"Logistic": 0, "Relu": 1, "Tanh": 2}
-        self._activation_functions_dec = {0: Logistic(), 1: Relu(), 2: Tanh()}
-
-        self.ann = ann
+    def __init__(self, fun):
+        self.fun = fun
+        self.velocity = 0
         self.position = None
-        self.pbest = None
-        self.velocity = None
         self.fitness = None
+        self.pbestposition = None
+        self.pbestfitness = None
         self.informants = None
 
-    def encode(self):
-        encoded = []
-        for layer in self.ann.network.layers:
-            if layer.weights is not None:
-                encoded.extend(np.array(layer.weights).flatten())
+        self.init_position()
 
-        for layer in self.ann.network.layers:
-            if layer.weights is not None:
-                encoded.append(
-                    self._activation_functions_enc[layer.activation.__str__()]
-                )
+    def init_position(self):
+        dimension = self.fun.get_dimension()
+        self.position = np.random.uniform(-1, 1, dimension)
 
-        return encoded
+    def distance(self, particle):
+        return np.linalg.norm(self.position - particle.position)
 
-    def decode(self, encoded):
-        decoded = []
-        encoded = np.array(encoded)
-        for layer in self.ann.network.layers:
-            if layer.weights is not None:
-                weights = encoded[: layer.weights.size].reshape(layer.weights.shape)
-                layer.update_weights(weights)
-                decoded.append(weights)
-                encoded = encoded[layer.weights.size :]
+    def find_neighbours(self, particles, informant_size):
+        particles.sort(key=lambda p: self.distance(p))
+        return particles[:informant_size]
 
-        for layer in self.ann.network.layers:
-            if layer.weights is not None:
-                activation = self._activation_functions_dec[encoded[0]]
-                layer.update_activation(activation)
-                decoded.append(activation)
-                encoded = encoded[1:]
+    def set_informants(
+        self, informants_type, informants_size, particles, global_best=None
+    ):
+        if informants_type == RANDOM_INFORMANTS:
+            self.informants = random.sample(particles, k=informants_size)
 
-        return decoded
+        elif informants_type == LOCAL_NEIGHBOUR_INFORMANTS:
+            self.informants = self.find_neighbours(particles, informants_size)
+
+        elif informants_type == LOCAL_GLOBAL_INFORMANTS:
+            self.informants = self.find_neighbours(particles, informants_size - 1)
+            self.informants.append(global_best)
+
+    def get_fitness(self):
+        return self.fitness
+
+    def get_personal_best(self):
+        return self.pbestposition, self.pbestfitness
+
+    def compute_fitness(self, opt):
+        acc, loss = self.fun.evaluate(self.position)
+        self.fitness = loss
+
+        if self.pbestfitness is None or opt(loss, self.pbestfitness):
+            self.pbestfitness = loss
+            self.pbestposition = np.copy(self.position)
+
+        return acc, loss
+
+    def find_local_best(self, opt):
+        local_best = None
+        local_best_fitness = None
+
+        for informant in self.informants:
+            _, informant_fitness = informant.get_personal_best()
+            if local_best is None or opt(informant_fitness, local_best_fitness):
+                local_best = informant
+                local_best_fitness = informant_fitness
+
+        return local_best
+
+    def move(self, global_best, alpha, beta, gamma, delta, epsilon, opt):
+        local_best = self.find_local_best(opt)
+
+        seed = secrets.randbits(128)
+        rng = np.random.default_rng(seed)
+
+        self.velocity = alpha * self.velocity
+        self.velocity += (
+            beta
+            * rng.random(size=self.position.shape)
+            * (self.pbestposition - self.position)
+        )
+        self.velocity += (
+            gamma
+            * rng.random(size=self.position.shape)
+            * (local_best.position - self.position)
+        )
+        self.velocity += (
+            delta * rng.random(size=self.position.shape) * (global_best - self.position)
+        )
+
+        self.position += epsilon * self.velocity

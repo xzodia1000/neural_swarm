@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-
-from neural_swarm.ann.activation import Relu
-from neural_swarm.ann.ann_builder import ANNBuilder
+from neural_swarm.ann.activation import Sigmoid
+from neural_swarm.ann.ann import ANN
 
 
 def prep_data():
@@ -29,15 +28,11 @@ def get_randn_predictions():
 
 
 def prep_test_ann():
-    x, y_true = prep_data()
-    activation = Relu()
+    activation = Sigmoid()
 
-    ann = ANNBuilder()
-
-    ann.add_layer(nodes=4, activation=activation, input=x)
+    ann = ANN()
+    ann.add_layer(nodes=4, activation=activation)
     ann.add_layer(nodes=3, activation=activation)
-    ann.add_layer(nodes=1, activation=activation, y_true=y_true)
-
-    ann.build()
+    ann.add_layer(nodes=1, activation=activation)
 
     return ann
