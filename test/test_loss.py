@@ -1,8 +1,5 @@
-import math
 from sklearn.metrics import hinge_loss, log_loss, mean_squared_error
-from neural_swarm.loss.hinge import Hinge
-from neural_swarm.loss.mse import Mse
-from neural_swarm.loss.binary_cross_entropy import BinaryCrossEntropy
+from neural_swarm.ann.loss import BinaryCrossEntropy, Mse, Hinge
 from test.test_data import get_rand_predictions, get_randn_predictions
 
 
@@ -21,5 +18,4 @@ def test_mse():
 def test_hinge():
     y_true, y_pred = get_randn_predictions()
     loss = Hinge()
-
     assert loss.evaluate(y_true, y_pred) == hinge_loss(y_true, y_pred)

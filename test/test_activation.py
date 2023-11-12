@@ -1,11 +1,9 @@
 import numpy as np
-from neural_swarm.activation.logistic import Logistic
-from neural_swarm.activation.relu import Relu
-from neural_swarm.activation.tanh import Tanh
+from neural_swarm.ann.activation import Sigmoid, Tanh, Relu
 
 
 def test_logistic():
-    activation = Logistic()
+    activation = Sigmoid()
     assert np.isclose(activation.evaluate(0), 0.5)
     assert np.isclose(activation.evaluate(1), 0.73105858)
 

@@ -1,12 +1,12 @@
 from random import randrange
-from neural_swarm.activation.logistic import Logistic
+from neural_swarm.ann.activation import Sigmoid
 from neural_swarm.ann.layer import Layer
 from test.test_data import prep_data
 
 
 def test_layer_init():
     layers = []
-    activation = Logistic()
+    activation = Sigmoid()
 
     # x, y = np.array([[2, 3, 2], [3, 3, 3]]), np.array([1, 0])
     x, y = prep_data()
