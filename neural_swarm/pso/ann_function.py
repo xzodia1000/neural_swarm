@@ -26,7 +26,7 @@ class ANNFunction:
         #         encoded.append(
         #             self._activation_functions_enc[layer.activation.__str__()]
         #         )
-        
+
         return dimension
 
     def set_variable(self, variable):

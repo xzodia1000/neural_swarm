@@ -1,6 +1,4 @@
 import copy
-
-import numpy as np
 from neural_swarm.pso.constants import operators
 from neural_swarm.pso.particle import Particle
 
@@ -35,7 +33,6 @@ class PSO:
         self.particles = []
         self.global_best = None
         self.global_best_fitness = None
-        self.global_best_position = None
         self.global_best_acc = None
 
         self.init_particles()
@@ -64,19 +61,19 @@ class PSO:
             if self.global_best is None or self.opt(
                 particle.get_fitness(), self.global_best.fitness
             ):
-                self.global_best = particle
+                self.global_best = copy.deepcopy(particle)
                 self.global_best_fitness = particle.get_fitness()
-                self.global_best_position = np.copy(particle.position)
                 self.global_best_acc = particle.compute_fitness(self.opt)[0]
+                self.fun.set_variable(self.global_best.position)
 
     def evolve(self):
         loss = []
         acc = []
         decrement = (self.epsilon - 0.4) / 1000
-        for i in range(self.iterations):
+        for _ in range(self.iterations):
             for particle in self.particles:
                 particle.move(
-                    self.global_best_position,
+                    self.global_best,
                     self.alpha,
                     self.beta,
                     self.gamma,
@@ -85,9 +82,9 @@ class PSO:
                     self.opt,
                 )
                 particle.compute_fitness(self.opt)
+
             self.update_global_best()
-            self.init_informants()
-            print("Epoch " + str(i + 1) + ": " + str(self.global_best_fitness))
+
             loss.append(self.global_best_fitness)
             acc.append(self.global_best_acc)
             self.epsilon -= decrement

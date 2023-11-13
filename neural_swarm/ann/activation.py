@@ -48,3 +48,15 @@ class Relu(Activation):
 
     def __str__(self):
         return "Relu"
+
+
+class Softmax(Activation):
+    def evaluate(self, x):
+        e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        return e_x / e_x.sum(axis=-1, keepdims=True)
+
+    def derivative(self, x):
+        return self.evaluate(x) * (1 - self.evaluate(x))
+
+    def __str__(self):
+        return "Softmax"

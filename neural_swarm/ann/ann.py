@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.metrics import accuracy_score
 from neural_swarm.ann.layer import Layer
 from neural_swarm.ann.network import Network
 
@@ -22,9 +23,19 @@ class ANN:
 
         ann_loss = loss.evaluate(y_pred, y)
 
-        y_pred = (y_pred > 0.5).astype(int)
-        correct_predictions = np.sum(y == y_pred)
-        total_predictions = len(y)
-        accuracy = correct_predictions / total_predictions
+        accuracy = 0
+        if loss.__str__() == "BinaryCrossEntropy":
+            accuracy = self.binary_classification_accuracy(y, y_pred)
+        elif loss.__str__() == "CategoricalCrossEntropy":
+            accuracy = self.categorical_classification_accuracy(y, y_pred)
 
         return accuracy * 100, ann_loss
+
+    def binary_classification_accuracy(self, y_true, y_pred, threshold=0.5):
+        y_pred = (y_pred > threshold).astype(int)
+        return np.mean(y_pred == y_true)
+
+    def categorical_classification_accuracy(self, y_true, y_pred):
+        y_true = np.argmax(y_true, axis=1)
+        y_pred = np.argmax(y_pred, axis=1)
+        return np.mean(y_pred == y_true)

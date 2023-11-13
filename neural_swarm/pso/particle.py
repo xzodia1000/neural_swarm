@@ -90,7 +90,9 @@ class Particle:
             * (local_best.position - self.position)
         )
         self.velocity += (
-            delta * rng.random(size=self.position.shape) * (global_best - self.position)
+            delta
+            * rng.random(size=self.position.shape)
+            * (global_best.position - self.position)
         )
 
         self.position += epsilon * self.velocity
