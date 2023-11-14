@@ -1,8 +1,9 @@
 import numpy as np
 from neural_swarm.ann.activation import Identity, Sigmoid, Relu, Softmax, Tanh
+from neural_swarm.pso.fitness_function import FitnessFunction
 
 
-class ANNFunction:
+class ANNFunction(FitnessFunction):
     def __init__(self, ann, x, y, loss, optimize_activation=False):
         self.ann = ann
         self.x = x
@@ -10,7 +11,7 @@ class ANNFunction:
         self.loss = loss
         self.optimize_activation = optimize_activation
 
-        self._activation_functions_dec = {
+        self._activation_functions_map = {
             0: Sigmoid(),
             1: Relu(),
             2: Tanh(),
@@ -33,9 +34,9 @@ class ANNFunction:
 
         return dimension
 
-    def set_variable(self, variable):
+    def set_variable(self, particle):
         decoded = []
-        encoded = np.array(variable)
+        encoded = np.array(particle)
         for layer in self.ann.network.layers:
             if layer.weights is not None:
                 weights = encoded[: layer.weights.size].reshape(layer.weights.shape)
@@ -45,7 +46,7 @@ class ANNFunction:
 
                 if self.optimize_activation:
                     activation_index = int(np.clip(np.floor(encoded[0] * 5), 0, 4))
-                    activation_function = self._activation_functions_dec[
+                    activation_function = self._activation_functions_map[
                         activation_index
                     ]
                     layer.set_activation(activation_function)
@@ -54,7 +55,7 @@ class ANNFunction:
 
         return decoded
 
-    def evaluate(self, variable):
-        self.set_variable(variable)
+    def evaluate(self, particle):
+        self.set_variable(particle)
         acc, loss = self.ann.evaluate(self.x, self.y, self.loss)
         return acc, loss

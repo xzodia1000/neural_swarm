@@ -21,7 +21,7 @@ def test_iris_pso():
     epsilon = 0.9
     informants_type = RANDOM_INFORMANTS
     informants_size = 5
-    iterations = 1000
+    iterations = 500
 
     pso = PSO(
         fun,
@@ -43,9 +43,9 @@ def test_iris_pso():
     print("\nLoss: ", result[1])
     print("\nLoss Length: ", len(result[1]))
 
-    np.savetxt("pso_ann_iris_test.txt", ann.run(x), fmt="%s")
+    np.savetxt("test_outputs/pso_ann_iris_test.txt", ann.run(x), fmt="%s")
 
-    with open("pso_ann_weights_iris_test.txt", "w") as f:
+    with open("test_outputs/pso_ann_weights_iris_test.txt", "w") as f:
         for layer in ann.network.layers:
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
@@ -62,7 +62,7 @@ def test_pso():
     epsilon = 0.9
     informants_type = RANDOM_INFORMANTS
     informants_size = 5
-    iterations = 1000
+    iterations = 500
 
     pso = PSO(
         fun,
@@ -84,9 +84,9 @@ def test_pso():
     print("\nLoss: ", result[1])
     print("\nLoss Length: ", len(result[1]))
 
-    np.savetxt("pso_ann_test.txt", ann.run(x), fmt="%s")
+    np.savetxt("test_outputs/pso_ann_test.txt", ann.run(x), fmt="%s")
 
-    with open("pso_ann_weights_test.txt", "w") as f:
+    with open("test_outputs/pso_ann_weights_test.txt", "w") as f:
         for layer in ann.network.layers:
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
