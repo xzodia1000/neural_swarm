@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.naive_bayes import LabelBinarizer
-from neural_swarm.ann.activation import Sigmoid, Softmax
+from neural_swarm.ann.activation import Relu, Sigmoid, Softmax
 from neural_swarm.ann.ann import ANN
 
 
@@ -46,13 +46,14 @@ def get_rand_iris_predictions():
 
 
 def prep_test_ann():
-    activation = Sigmoid()
+    activation = Relu()
+    activation_sigmoid = Sigmoid()
 
     ann = ANN()
     ann.add_layer(nodes=4, activation=activation)
     ann.add_layer(nodes=2, activation=activation)
     ann.add_layer(nodes=3, activation=activation)
-    ann.add_layer(nodes=1, activation=activation)
+    ann.add_layer(nodes=1, activation=activation_sigmoid)
 
     return ann
 

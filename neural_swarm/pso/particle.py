@@ -56,7 +56,7 @@ class Particle:
 
         if self.pbestfitness is None or opt(loss, self.pbestfitness):
             self.pbestfitness = loss
-            self.pbestposition = np.copy(self.position)
+            self.pbestposition = self.position.copy()
 
         return acc, loss
 

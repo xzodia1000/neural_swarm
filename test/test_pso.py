@@ -14,7 +14,7 @@ def test_iris_pso():
     ann = prep_test_iris_ann()
     x, y_true, _ = prep_test_iris()
     loss = CategoricalCrossEntropy()
-    fun = ANNFunction(ann, x, y_true, loss)
+    fun = ANNFunction(ann, x, y_true, loss, True)
 
     swarm_size = 15
     alpha, beta, gamma, delta = np.random.dirichlet(np.ones(4)) * 4
@@ -45,12 +45,17 @@ def test_iris_pso():
 
     np.savetxt("pso_ann_iris_test.txt", ann.run(x), fmt="%s")
 
+    with open("pso_ann_weights_iris_test.txt", "w") as f:
+        for layer in ann.network.layers:
+            f.write(str(layer.weights) + "\n")
+            f.write(str(layer.activation) + "\n")
+
 
 def test_pso():
     ann = prep_test_ann()
     x, y_true = prep_data()
     loss = BinaryCrossEntropy()
-    fun = ANNFunction(ann, x, y_true, loss)
+    fun = ANNFunction(ann, x, y_true, loss, True)
 
     swarm_size = 15
     alpha, beta, gamma, delta = np.random.dirichlet(np.ones(4)) * 4
@@ -80,3 +85,8 @@ def test_pso():
     print("\nLoss Length: ", len(result[1]))
 
     np.savetxt("pso_ann_test.txt", ann.run(x), fmt="%s")
+
+    with open("pso_ann_weights_test.txt", "w") as f:
+        for layer in ann.network.layers:
+            f.write(str(layer.weights) + "\n")
+            f.write(str(layer.activation) + "\n")

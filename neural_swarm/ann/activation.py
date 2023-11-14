@@ -60,3 +60,14 @@ class Softmax(Activation):
 
     def __str__(self):
         return "Softmax"
+
+
+class Identity(Activation):
+    def evaluate(self, x):
+        return x
+
+    def derivative(self, x):
+        return np.ones_like(x)
+
+    def __str__(self):
+        return "Identity"

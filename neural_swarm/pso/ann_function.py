@@ -1,16 +1,22 @@
 import numpy as np
-from neural_swarm.ann.activation import Sigmoid, Relu, Tanh
+from neural_swarm.ann.activation import Identity, Sigmoid, Relu, Softmax, Tanh
 
 
 class ANNFunction:
-    def __init__(self, ann, x, y, loss):
+    def __init__(self, ann, x, y, loss, optimize_activation=False):
         self.ann = ann
         self.x = x
         self.y = y
         self.loss = loss
+        self.optimize_activation = optimize_activation
 
-        self._activation_functions_enc = {"Sigmoid": 0, "Relu": 1, "Tanh": 2}
-        self._activation_functions_dec = {0: Sigmoid(), 1: Relu(), 2: Tanh()}
+        self._activation_functions_dec = {
+            0: Sigmoid(),
+            1: Relu(),
+            2: Tanh(),
+            3: Softmax(),
+            4: Identity(),
+        }
 
     def get_ann(self):
         return self.ann
@@ -19,13 +25,11 @@ class ANNFunction:
         dimension = 0
         for layer in self.ann.network.layers:
             if layer.weights is not None:
-                dimension += np.array(layer.weights).flatten().shape[0]
-
-        # for layer in self.fun.network.layers:
-        #     if layer.weights is not None:
-        #         encoded.append(
-        #             self._activation_functions_enc[layer.activation.__str__()]
-        #         )
+                dimension += (
+                    np.array(layer.weights).flatten().shape[0] + 1
+                    if self.optimize_activation
+                    else np.array(layer.weights).flatten().shape[0]
+                )
 
         return dimension
 
@@ -39,12 +43,14 @@ class ANNFunction:
                 decoded.append(weights)
                 encoded = encoded[layer.weights.size :]
 
-        # for layer in self.ann.network.layers:
-        #     if layer.weights is not None:
-        #         activation = self._activation_functions_dec[encoded[0]]
-        #         layer.set_activation(activation)
-        #         decoded.append(activation)
-        #         encoded = encoded[1:]
+                if self.optimize_activation:
+                    activation_index = int(np.clip(np.floor(encoded[0] * 5), 0, 4))
+                    activation_function = self._activation_functions_dec[
+                        activation_index
+                    ]
+                    layer.set_activation(activation_function)
+                    decoded.append(activation_function)
+                    encoded = encoded[1:]
 
         return decoded
 
