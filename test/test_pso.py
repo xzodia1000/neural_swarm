@@ -17,8 +17,10 @@ def test_iris_pso():
     fun = ANNFunction(ann, x, y_true, loss, True)
 
     swarm_size = 15
-    alpha, beta, gamma, delta = np.random.dirichlet(np.ones(4)) * 4
-    epsilon = 0.9
+    alpha = np.random.uniform(0, 1)
+    beta, gamma, delta = np.random.dirichlet(np.ones(3)) * 4
+    print("alpha: ", alpha, "beta: ", beta, "gamma: ", gamma, "delta: ", delta)
+    epsilon = 0.4
     informants_type = RANDOM_INFORMANTS
     informants_size = 5
     iterations = 500
@@ -50,6 +52,8 @@ def test_iris_pso():
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
 
+    print_final(result[1][-1], result[0][-1], "Iris")
+
 
 def test_pso():
     ann = prep_test_ann()
@@ -58,8 +62,10 @@ def test_pso():
     fun = ANNFunction(ann, x, y_true, loss, True)
 
     swarm_size = 15
-    alpha, beta, gamma, delta = np.random.dirichlet(np.ones(4)) * 4
-    epsilon = 0.9
+    alpha = np.random.uniform(0, 1)
+    beta, gamma, delta = np.random.dirichlet(np.ones(3)) * 4
+    print("alpha: ", alpha, "beta: ", beta, "gamma: ", gamma, "delta: ", delta)
+    epsilon = 0.4
     informants_type = RANDOM_INFORMANTS
     informants_size = 5
     iterations = 500
@@ -90,3 +96,13 @@ def test_pso():
         for layer in ann.network.layers:
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
+
+    print_final(result[1][-1], result[0][-1], "Banknote")
+
+
+def print_final(loss, acc, dataset):
+    print("\n\n\n")
+    print("Dataset: ", dataset)
+    print("Loss: ", loss)
+    print("Accuracy: ", acc)
+    print("\n\n\n")
