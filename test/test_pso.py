@@ -52,7 +52,18 @@ def test_iris_pso():
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
 
-    print_final(result[1][-1], result[0][-1], "Iris")
+    print_final(
+        result[1][-1],
+        result[0][-1],
+        "Iris",
+        alpha,
+        beta,
+        gamma,
+        delta,
+        epsilon,
+        informants_size,
+        iterations,
+    )
 
 
 def test_pso():
@@ -97,11 +108,40 @@ def test_pso():
             f.write(str(layer.weights) + "\n")
             f.write(str(layer.activation) + "\n")
 
-    print_final(result[1][-1], result[0][-1], "Banknote")
+    print_final(
+        result[1][-1],
+        result[0][-1],
+        "Banknote",
+        alpha,
+        beta,
+        gamma,
+        delta,
+        epsilon,
+        informants_size,
+        iterations,
+    )
 
 
-def print_final(loss, acc, dataset):
+def print_final(
+    loss, acc, dataset, alpha, beta, gamma, delta, epsilon, informants_size, iterations
+):
     print("\n\n\n")
+    print(
+        "alpha: ",
+        alpha,
+        "beta: ",
+        beta,
+        "gamma: ",
+        gamma,
+        "delta: ",
+        delta,
+        "epsilon: ",
+        epsilon,
+        "informants_size: ",
+        informants_size,
+        "iterations: ",
+        iterations,
+    )
     print("Dataset: ", dataset)
     print("Loss: ", loss)
     print("Accuracy: ", acc)
