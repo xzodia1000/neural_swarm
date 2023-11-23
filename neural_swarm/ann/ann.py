@@ -1,7 +1,6 @@
 import numpy as np
-from sklearn.metrics import accuracy_score
-from neural_swarm.ann.layer import Layer
-from neural_swarm.ann.network import Network
+from .layer import Layer
+from .network import Network
 
 
 class ANN:
