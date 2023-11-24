@@ -1,8 +1,13 @@
 import streamlit as st
-from gui.home_page import home_page
-from gui.create_ann_page import create_ann_page
-from ann_main import ANNMain
-from gui.view_dataset_page import view_dataset_page
+from neural_swarm.ann_main import ANNMain
+from neural_swarm.gui import (
+    home_page,
+    create_ann_page,
+    view_dataset_page,
+    show_ann_page,
+    configure_pso_page,
+    train_ann_page,
+)
 
 
 def main():
@@ -15,13 +20,22 @@ def main():
         st.session_state["page"] = "home"
 
     if st.session_state["page"] == "home":
-        home_page(st.session_state["ann_main"])
+        home_page.home_page(st.session_state["ann_main"])
 
     if st.session_state["page"] == "view_dataset":
-        view_dataset_page(st.session_state["ann_main"])
+        view_dataset_page.view_dataset_page(st.session_state["ann_main"])
 
     if st.session_state["page"] == "create_ann":
-        create_ann_page(st.session_state["ann_main"])
+        create_ann_page.create_ann_page(st.session_state["ann_main"])
+
+    if st.session_state["page"] == "show_ann":
+        show_ann_page.show_ann_page(st.session_state["ann_main"])
+
+    if st.session_state["page"] == "configure_pso":
+        configure_pso_page.configure_pso_page(st.session_state["ann_main"])
+
+    if st.session_state["page"] == "train_ann":
+        train_ann_page.train_ann_page(st.session_state["ann_main"])
 
 
 if __name__ == "__main__":

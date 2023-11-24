@@ -1,7 +1,7 @@
 import random
 import secrets
 import numpy as np
-from neural_swarm.pso.constants import (
+from neural_swarm.constants import (
     RANDOM_INFORMANTS,
     LOCAL_NEIGHBOUR_INFORMANTS,
     LOCAL_GLOBAL_INFORMANTS,

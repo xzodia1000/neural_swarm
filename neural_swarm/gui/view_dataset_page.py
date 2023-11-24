@@ -3,17 +3,12 @@ import streamlit as st
 
 def view_dataset_page(ann_main):
     st.subheader("Feature Selection and Splitting")
-
-    st.dataframe(ann_main.dataset)
-
     df_columns = ann_main.get_dataset_features()
-
     selected_columns = st.multiselect(
         "Select features you want to keep:", df_columns, default=df_columns
     )
-
     new_df = ann_main.dataset[selected_columns + [ann_main.dataset.columns[-1]]]
-
+    st.dataframe(new_df)
     train_size = st.slider(
         "Select the train set size ratio",
         min_value=10,
@@ -25,9 +20,9 @@ def view_dataset_page(ann_main):
 
     col1, col2 = st.columns(2)
     with col1:
-        back = st.button("Back", key="back2")
+        back = st.button("Back: Select Dataset")
     with col2:
-        next = st.button("Next", key="next2")
+        next = st.button("Next: Create ANN")
     if back:
         st.session_state["page"] = "home"
         st.rerun()

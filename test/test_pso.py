@@ -1,7 +1,7 @@
 import numpy as np
 from neural_swarm.ann.loss import BinaryCrossEntropy, CategoricalCrossEntropy
 from neural_swarm.pso.ann_function import ANNFunction
-from neural_swarm.pso.constants import (
+from neural_swarm.constants import (
     LOCAL_GLOBAL_INFORMANTS,
     LOCAL_NEIGHBOUR_INFORMANTS,
     RANDOM_INFORMANTS,
@@ -39,11 +39,13 @@ def test_iris_pso():
         "MIN",
     )
 
-    result = pso.evolve()
-    print("Accuracy: ", result[0])
-    print("\nAccuracy Length: ", len(result[0]))
-    print("\nLoss: ", result[1])
-    print("\nLoss Length: ", len(result[1]))
+    loss = []
+    acc = []
+    for l, a, _ in pso.evolve():
+        loss.append(l)
+        acc.append(a)
+    print("Accuracy: ", acc)
+    print("\nLoss: ", loss)
 
     np.savetxt("test_outputs/pso_ann_iris_test.txt", ann.run(x), fmt="%s")
 
@@ -53,8 +55,8 @@ def test_iris_pso():
             f.write(str(layer.activation) + "\n")
 
     print_final(
-        result[1][-1],
-        result[0][-1],
+        loss[-1],
+        acc[-1],
         "Iris",
         alpha,
         beta,
@@ -95,11 +97,13 @@ def test_pso():
         "MIN",
     )
 
-    result = pso.evolve()
-    print("Accuracy: ", result[0])
-    print("\nAccuracy Length: ", len(result[0]))
-    print("\nLoss: ", result[1])
-    print("\nLoss Length: ", len(result[1]))
+    loss = []
+    acc = []
+    for l, a, _ in pso.evolve():
+        loss.append(l)
+        acc.append(a)
+    print("Accuracy: ", acc)
+    print("\nLoss: ", loss)
 
     np.savetxt("test_outputs/pso_ann_test.txt", ann.run(x), fmt="%s")
 
@@ -109,8 +113,8 @@ def test_pso():
             f.write(str(layer.activation) + "\n")
 
     print_final(
-        result[1][-1],
-        result[0][-1],
+        loss[-1],
+        acc[-1],
         "Banknote",
         alpha,
         beta,

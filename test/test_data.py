@@ -6,7 +6,7 @@ from neural_swarm.ann.ann import ANN
 
 
 def prep_data():
-    df = pd.read_csv("input/data_banknote_authentication.txt", header=None)
+    df = pd.read_csv("input/data_banknote_authentication.txt")
     df = df.sample(frac=1)
     x = df.drop(df.columns[-1], axis=1).values
     y_true = df[df.columns[-1]].values

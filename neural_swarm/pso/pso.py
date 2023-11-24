@@ -1,5 +1,5 @@
 import copy
-from neural_swarm.pso.constants import operators
+from neural_swarm.constants import operators
 from neural_swarm.pso.particle import Particle
 
 
@@ -67,8 +67,6 @@ class PSO:
                 self.fun.set_variable(self.global_best.position)
 
     def evolve(self):
-        loss = []
-        acc = []
         decrement = (self.epsilon - 0.4) / 1000
         for _ in range(self.iterations):
             for particle in self.particles:
@@ -84,9 +82,6 @@ class PSO:
                 particle.compute_fitness(self.opt)
 
             self.update_global_best()
-
-            loss.append(self.global_best_fitness)
-            acc.append(self.global_best_acc)
             self.epsilon -= decrement
 
-        return acc, loss
+            yield self.global_best_fitness, self.global_best_acc, self.particles

@@ -32,7 +32,7 @@ def home_page(ann_main):
             st.dataframe(st.session_state["df"])
             st.write(st.session_state["df"].shape)
 
-        if st.button("Next", key="next1"):
+        if st.button("Next: View Dataset"):
             ann_main.set_dataset(st.session_state["df"])
             st.session_state["page"] = "view_dataset"
             st.rerun()
