@@ -9,7 +9,7 @@ def home_page(ann_main):
         st.session_state["file"] = None
 
     if "checkbox_state" not in st.session_state:
-        st.session_state["checkbox_state"] = False
+        st.session_state["checkbox_state"] = True
 
     dataset = st.file_uploader("Upload a dataset")
 
@@ -25,8 +25,8 @@ def home_page(ann_main):
 
         if dataset != st.session_state["file"]:
             st.session_state["file"] = dataset
-            st.session_state["checkbox_state"] = False
-            process_file(dataset, False)
+            st.session_state["checkbox_state"] = True
+            process_file(dataset, True)
 
         if "df" in st.session_state:
             st.dataframe(st.session_state["df"])

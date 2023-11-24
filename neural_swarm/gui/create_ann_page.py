@@ -39,6 +39,7 @@ def create_ann_page(ann_main):
         ann_main.set_ann(st.session_state.layers)
         ann_main.update_loss(st.session_state.loss)
         st.session_state["page"] = "show_ann"
+        del st.session_state["layers"]
         st.rerun()
 
 

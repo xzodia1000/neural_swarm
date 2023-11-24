@@ -34,11 +34,7 @@ class ANN:
         elif loss.__str__() == "CategoricalCrossEntropy":
             accuracy = self.categorical_classification_accuracy(y, y_pred)
 
-        return accuracy, ann_loss
-
-    def binary_classification_accuracy(self, y_true, y_pred, threshold=0.5):
-        y_pred = (y_pred > threshold).astype(int)
-        return y_pred
+        return accuracy * 100, ann_loss
 
     def categorical_classification_accuracy(self, y_true, y_pred):
         y_true = np.argmax(y_true, axis=1)

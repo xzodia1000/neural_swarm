@@ -1,21 +1,21 @@
-from matplotlib import pyplot as plt
 import streamlit as st
 
 
 def train_ann_page(ann_main):
     st.subheader("Training ANN with PSO")
-    plot_container = st.empty()
+    progress_bar = st.progress(0)
+    total_iterations = ann_main.iterations
 
-    for i, l, a, p in ann_main.train_ann():
-        plot = plot_particles(p, i)
-        plot_container.pyplot(plot)
+    if "train_ann" not in st.session_state:
+        st.session_state["train_ann"] = False
 
+    if not st.session_state["train_ann"]:
+        for i in ann_main.train_ann():
+            progress_bar.progress(int(100 * i / total_iterations))
 
-def plot_particles(particles, iteration):
-    plt.figure(figsize=(10, 6))
-    plt.scatter(range(len(particles)), particles, alpha=0.5)
-    plt.title(f"Particle positions at iteration {iteration}")
-    plt.xlabel("Particle Index")
-    plt.ylabel("Particle Position")
-    plt.grid(True)
-    return plt
+    st.session_state["train_ann"] = True
+
+    if st.button("Next: View Results"):
+        st.session_state["page"] = "view_results"
+        del st.session_state["train_ann"]
+        st.rerun()

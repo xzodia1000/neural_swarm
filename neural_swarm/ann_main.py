@@ -35,6 +35,9 @@ class ANNMain:
 
         self.pso = None
         self.ann_function = None
+        self.iterations = None
+        self.ann_loss = []
+        self.ann_acc = []
 
     def set_dataset(self, dataset):
         self.dataset = dataset
@@ -127,6 +130,8 @@ class ANNMain:
 
         opt = "MAX" if opt == "Maximize" else "MIN"
 
+        self.iterations = iterations
+
         if randomize_weights:
             alpha = np.random.uniform(0, 1)
             beta, gamma, delta = np.random.dirichlet(np.ones(3)) * 4
@@ -147,12 +152,12 @@ class ANNMain:
         )
 
     def train_ann(self):
-        loss = []
-        acc = []
         i = 0
-        for l, a, p in self.pso.evolve():
-            loss.append(l)
-            acc.append(a)
-            particles = [i.position for i in p]
+        for l, a in self.pso.evolve():
+            self.ann_loss.append(l)
+            self.ann_acc.append(a)
             i += 1
-            yield i, loss, acc, particles
+            yield i
+
+    def evaluate_results(self):
+        return self.ann.evaluate(self.X_test, self.y_test, self.loss)

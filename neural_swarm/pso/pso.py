@@ -67,7 +67,6 @@ class PSO:
                 self.fun.set_variable(self.global_best.position)
 
     def evolve(self):
-        decrement = (self.epsilon - 0.4) / 1000
         for _ in range(self.iterations):
             for particle in self.particles:
                 particle.move(
@@ -82,6 +81,7 @@ class PSO:
                 particle.compute_fitness(self.opt)
 
             self.update_global_best()
-            self.epsilon -= decrement
 
-            yield self.global_best_fitness, self.global_best_acc, self.particles
+            yield copy.deepcopy(self.global_best_fitness), copy.deepcopy(
+                self.global_best_acc
+            )

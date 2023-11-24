@@ -7,6 +7,7 @@ from neural_swarm.gui import (
     show_ann_page,
     configure_pso_page,
     train_ann_page,
+    view_results_page,
 )
 
 
@@ -36,6 +37,9 @@ def main():
 
     if st.session_state["page"] == "train_ann":
         train_ann_page.train_ann_page(st.session_state["ann_main"])
+
+    if st.session_state["page"] == "view_results":
+        view_results_page.view_results_page(st.session_state["ann_main"])
 
 
 if __name__ == "__main__":
