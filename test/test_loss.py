@@ -1,10 +1,9 @@
 import numpy as np
-from sklearn.metrics import hinge_loss, mean_squared_error, log_loss
+from sklearn.metrics import mean_squared_error, log_loss
 from neural_swarm.ann.loss import (
     BinaryCrossEntropy,
     CategoricalCrossEntropy,
     Mse,
-    Hinge,
 )
 from test.test_data import (
     get_rand_iris_predictions,
@@ -23,12 +22,6 @@ def test_mse():
     y_true, y_pred = get_randn_predictions()
     loss = Mse()
     assert loss.evaluate(y_true, y_pred) == mean_squared_error(y_true, y_pred)
-
-
-def test_hinge():
-    y_true, y_pred = get_randn_predictions()
-    loss = Hinge()
-    assert loss.evaluate(y_true, y_pred) == hinge_loss(y_true, y_pred)
 
 
 def test_categorical_cross_entropy():

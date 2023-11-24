@@ -37,7 +37,6 @@ def create_ann_page(ann_main):
         st.rerun()
     if next:
         ann_main.set_ann(st.session_state.layers)
-        ann_main.update_loss(st.session_state.loss)
         st.session_state["page"] = "show_ann"
         del st.session_state["layers"]
         st.rerun()
@@ -148,9 +147,10 @@ def show_loss(loss):
         with col2:
             st.selectbox(
                 "Loss Function",
-                options=["Binary Cross Entropy", "Hinge"],
+                options=["Binary Cross Entropy"],
                 index=0,
                 key="loss",
+                disabled=True,
             )
     elif loss == "CategoricalCrossEntropy":
         with col1:

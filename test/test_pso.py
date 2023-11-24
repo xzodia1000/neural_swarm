@@ -41,7 +41,7 @@ def test_iris_pso():
 
     loss = []
     acc = []
-    for l, a, _ in pso.evolve():
+    for l, a in pso.evolve():
         loss.append(l)
         acc.append(a)
     print("Accuracy: ", acc)
@@ -99,7 +99,7 @@ def test_pso():
 
     loss = []
     acc = []
-    for l, a, _ in pso.evolve():
+    for l, a in pso.evolve():
         loss.append(l)
         acc.append(a)
     print("Accuracy: ", acc)
